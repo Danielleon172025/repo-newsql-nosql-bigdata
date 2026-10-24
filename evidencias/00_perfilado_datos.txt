@@ -1,0 +1,11 @@
+Registros leidos      : 5543
+Registros limpios     : 5543
+Celdas vacias (antes) : 58
+Fechas centinela 1900 : 1212
+
+genero: {'MUJER': 4603, 'HOMBRE': 938, 'ND': 2}
+estado: {'ACTIVO': 4826, 'NO ACTIVO': 717}
+tipo_poblacion: {'SISBEN': 2559, 'UNIDOS': 1538, 'DESPLAZADOS': 993, 'ND': 453}
+rango_edad: {'30-49': 2939, '50-65': 1133, '18-29': 661, '06-17': 649, '>65': 161}
+bancarizado: {'SI': 4070, 'NO': 1288, 'ND': 185}
+etnia: {'ND': 5069, 'AFROCOLOMBIANO – NEGRO': 401, 'ROM O GITANO': 51, 'INDIGENA': 17, 'RAIZAL': 2, 'MESTIZO': 2, 'PALENQUERO': 1}

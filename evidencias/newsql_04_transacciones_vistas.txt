@@ -1,0 +1,52 @@
+SET
+  id |  estado
+-----+------------
+  14 | NO ACTIVO
+(1 row)
+BEGIN
+INSERT 0 1
+UPDATE 1
+COMMIT
+  id | estado | campo  | valor_anterior | valor_nuevo
+-----+--------+--------+----------------+--------------
+  14 | ACTIVO | estado | NO ACTIVO      | ACTIVO
+(1 row)
+BEGIN
+UPDATE 1
+  id | dentro_de_la_transaccion
+-----+---------------------------
+   1 |                       99
+(1 row)
+ROLLBACK
+  id | cantidad_beneficiarios
+-----+-------------------------
+   1 |                      1
+(1 row)
+CREATE VIEW
+  tipo_poblacion |  estado   | total | personas_en_nucleo
+-----------------+-----------+-------+---------------------
+  DESPLAZADOS    | ACTIVO    |   933 |               1610
+  DESPLAZADOS    | NO ACTIVO |    60 |                163
+  ND             | ACTIVO    |    28 |                 37
+  ND             | NO ACTIVO |   425 |               1348
+  SISBEN         | ACTIVO    |  2427 |               6209
+  SISBEN         | NO ACTIVO |   132 |                730
+  UNIDOS         | ACTIVO    |  1439 |               3463
+  UNIDOS         | NO ACTIVO |    99 |                524
+(8 rows)
+                           info
+----------------------------------------------------------
+  distribution: local
+  vectorized: true
+
+  • group (scalar)
+  │
+  └── • scan
+        missing stats
+        table: beneficiarios@idx_estado_poblacion
+        spans: [/'ACTIVO'/'SISBEN' - /'ACTIVO'/'SISBEN']
+(9 rows)
+       start_key      |   end_key    | range_id | replicas | replica_localities | voting_replicas | non_voting_replicas | learner_replicas | split_enforced_until
+----------------------+--------------+----------+----------+--------------------+-----------------+---------------------+------------------+-----------------------
+  <before:/Table/111> | <after:/Max> |       68 | {1}      | {""}               | {1}             | {}                  | {}               | NULL
+(1 row)

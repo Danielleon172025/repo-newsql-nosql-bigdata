@@ -1,0 +1,1 @@
+SELECT table_name FROM familias_accion_db.information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;

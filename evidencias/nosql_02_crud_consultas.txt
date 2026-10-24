@@ -1,0 +1,88 @@
+--- 1.1 Total de documentos y un documento de ejemplo
+5543
+{
+  id: 12,
+  bancarizado: 'NO',
+  discapacidad: 'NO',
+  estado: 'ACTIVO',
+  etnia: 'ND',
+  fecha_inscripcion: '2012-12-01',
+  genero: 'HOMBRE',
+  nivel_escolaridad: 'PRIMARIA',
+  tipo_documento: 'RC',
+  tipo_poblacion: 'SISBEN',
+  rango_beneficio_total: '0 - 1.500.000',
+  rango_ultimo_beneficio: '0 - 1.300.000',
+  rango_edad: '06-17',
+  titular: 'NO',
+  cantidad_beneficiarios: 4
+}
+--- 1.2 find con filtro y proyeccion: mujeres titulares, activas, de 30-49 anios
+[
+  {
+    id: 3,
+    tipo_poblacion: 'DESPLAZADOS',
+    rango_beneficio_total: '3.000.001 - 4.500.000'
+  },
+  {
+    id: 43,
+    tipo_poblacion: 'SISBEN',
+    rango_beneficio_total: '1.500.001 - 3.000.000'
+  },
+  {
+    id: 47,
+    tipo_poblacion: 'DESPLAZADOS',
+    rango_beneficio_total: '1.500.001 - 3.000.000'
+  }
+]
+--- 1.3 Operadores: personas con discapacidad O etnia indigena
+71
+--- 1.4 $in y $gt: nucleos con mas de 3 integrantes en poblacion UNIDOS o DESPLAZADOS
+123
+--- 1.5 insertOne / updateOne / deleteOne
+{
+  id: 999999,
+  estado: 'ACTIVO',
+  genero: 'MUJER',
+  tipo_poblacion: 'SISBEN',
+  nota: 'documento de prueba (esquema flexible)',
+  contacto: {
+    telefono: '3000000000'
+  }
+}
+1
+1
+--- 1.6 updateMany: normalizar tipo_documento 'NO DEFINIDO' a 'ND'
+6
+--- 1.7 Coleccion SAB.sensores (documentos con arreglo anidado)
+[
+  {
+    TipoSensores: [
+      {
+        IDSENSOR: 15,
+        IDESTACION: 1,
+        ESTACION: 'COLMAC',
+        IDTIPOSENSOR: 5,
+        TIPOSENSOR: 'Pluviometro',
+        UNIDADMEDIDA: 'Milimetros',
+        LATITUD: 4.8132608056,
+        LONGITUD: -74.0314564148,
+        ESTADO: 1,
+        IDTIPOTECNOLOGIA: 2,
+        TIPOTECNOLOGIA: 'Campbell',
+        IDLOCALIDAD: 1,
+        LOCALIDAD: 'USAQUEN',
+        VISIBLE: 1,
+        ACUMULADODIA: 0,
+        VALORLECTURA: 0,
+        FECHALECTURA: '2026-09-22 11:51:00.0',
+        ALTITUD: 0,
+        CODIGO: null,
+        GEOLOGIA: null,
+        IDESTADOSSISMOS: 8,
+        ESTADOESTACION: 0,
+        PRESIONATMOSFERICA: null
+      }
+    ]
+  }
+]

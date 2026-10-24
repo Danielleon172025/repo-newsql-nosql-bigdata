@@ -1,0 +1,24 @@
+--- 3.1 Sin indice (COLLSCAN)
+{
+  etapas: 'COLLSCAN',
+  docsExaminados: 5543,
+  devueltos: 2427
+}
+--- 3.2 Creacion de indice compuesto
+idx_estado_poblacion
+idx_id_unico
+--- 3.3 Con indice (IXSCAN)
+{
+  etapas: 'FETCH > IXSCAN',
+  docsExaminados: 2427,
+  devueltos: 2427
+}
+--- 3.4 Indices existentes
+[
+  '_id_',
+  'idx_estado_poblacion',
+  'idx_id_unico'
+]
+--- 3.5 Validacion de esquema opcional ($jsonSchema) en una coleccion nueva
+rechazado por validador (codigo 121): Document failed validation
+true

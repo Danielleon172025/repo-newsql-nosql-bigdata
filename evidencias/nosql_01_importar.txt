@@ -1,0 +1,6 @@
+2026-10-23T22:34:27.762+0000	connected to: mongodb://localhost/
+2026-10-23T22:34:27.764+0000	dropping: `familias_accion.beneficiarios`
+2026-10-23T22:34:28.033+0000	5543 document(s) imported successfully. 0 document(s) failed to import.
+2026-10-23T22:34:28.468+0000	connected to: mongodb://localhost/
+2026-10-23T22:34:28.468+0000	dropping: `SAB.sensores`
+2026-10-23T22:34:28.491+0000	1 document(s) imported successfully. 0 document(s) failed to import.

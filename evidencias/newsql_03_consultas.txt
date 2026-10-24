@@ -1,0 +1,108 @@
+> USE familias_accion_db;
+> SELECT count(*) AS total_registros FROM beneficiarios;
+SET
+> SELECT estado, genero, count(*) AS total
+FROM beneficiarios
+GROUP BY estado, genero
+ORDER BY estado, total DESC;
+  total_registros
+-------------------
+             5543
+(1 row)
+   estado   | genero | total
+------------+--------+--------
+  ACTIVO    | MUJER  |  4047
+  ACTIVO    | HOMBRE |   777
+  ACTIVO    | ND     |     2
+  NO ACTIVO | MUJER  |   556
+  NO ACTIVO | HOMBRE |   161
+(5 rows)
+> SELECT t.descripcion,
+       count(*) AS total,
+       round(100.0 * count(*) / sum(count(*)) OVER (), 2) AS porcentaje
+FROM beneficiarios b
+JOIN tipos_poblacion t ON t.codigo = b.tipo_poblacion
+GROUP BY t.descripcion
+ORDER BY total DESC;
+              descripcion             | total | porcentaje
+--------------------------------------+-------+-------------
+  Clasificado por el SISBEN           |  2559 |      46.17
+  Red Unidos (pobreza extrema)        |  1538 |      27.75
+  Poblacion victima de desplazamiento |   993 |      17.91
+  Sin dato                            |   453 |       8.17
+(4 rows)
+> SELECT rango_edad,
+       count(*) AS total,
+       count(*) FILTER (WHERE bancarizado = 'SI') AS bancarizados,
+       round(100.0 * count(*) FILTER (WHERE bancarizado = 'SI') / count(*), 1) AS pct_bancarizados
+FROM beneficiarios
+GROUP BY rango_edad
+HAVING count(*) > 100
+ORDER BY rango_edad;
+  rango_edad | total | bancarizados | pct_bancarizados
+-------------+-------+--------------+-------------------
+  06-17      |   649 |            0 |              0.0
+  18-29      |   661 |           83 |             12.6
+  30-49      |  2939 |         2763 |             94.0
+  50-65      |  1133 |         1081 |             95.4
+  >65        |   161 |          143 |             88.8
+(5 rows)
+> WITH conteo AS (
+    SELECT tipo_poblacion, rango_beneficio_total, count(*) AS total
+    FROM beneficiarios
+    WHERE estado = 'ACTIVO'
+    GROUP BY tipo_poblacion, rango_beneficio_total
+)
+SELECT tipo_poblacion, rango_beneficio_total, total,
+       DENSE_RANK() OVER (PARTITION BY tipo_poblacion ORDER BY total DESC) AS posicion
+FROM conteo
+ORDER BY tipo_poblacion, posicion;
+  tipo_poblacion | rango_beneficio_total | total | posicion
+-----------------+-----------------------+-------+-----------
+  DESPLAZADOS    | 0 - 1.500.000         |   468 |        1
+  DESPLAZADOS    | 3.000.001 - 4.500.000 |   143 |        2
+  DESPLAZADOS    | 1.500.001 - 3.000.000 |   126 |        3
+  DESPLAZADOS    | 4.500.001 - 6.000.000 |   100 |        4
+  DESPLAZADOS    | > 6.000.001           |    96 |        5
+  ND             | 0 - 1.500.000         |    27 |        1
+  ND             | 1.500.001 - 3.000.000 |     1 |        2
+  SISBEN         | 3.000.001 - 4.500.000 |   686 |        1
+  SISBEN         | 0 - 1.500.000         |   552 |        2
+  SISBEN         | 4.500.001 - 6.000.000 |   537 |        3
+  SISBEN         | 1.500.001 - 3.000.000 |   470 |        4
+  SISBEN         | > 6.000.001           |   182 |        5
+  UNIDOS         | 0 - 1.500.000         |   443 |        1
+  UNIDOS         | 3.000.001 - 4.500.000 |   357 |        2
+  UNIDOS         | 1.500.001 - 3.000.000 |   316 |        3
+  UNIDOS         | 4.500.001 - 6.000.000 |   235 |        4
+  UNIDOS         | > 6.000.001           |    87 |        5
+(17 rows)
+> SELECT extract(year FROM fecha_inscripcion) AS anio, count(*) AS inscritos
+FROM beneficiarios
+WHERE fecha_inscripcion IS NOT NULL
+GROUP BY anio
+ORDER BY anio;
+  anio | inscritos
+-------+------------
+  2012 |      4739
+  2013 |       155
+  2014 |        97
+  2015 |       197
+  2016 |       148
+  2017 |       114
+  2018 |        93
+(7 rows)
+> SELECT s.nombre_sede, s.localidad,
+       s.caracteristicas->>'camas_uci' AS camas_uci,
+       count(t.tx_id) AS atenciones,
+       round(avg(t.costo_estimado), 2) AS costo_promedio
+FROM subred_newsql_db.sedes_prestadores s
+JOIN subred_newsql_db.transacciones_atencion t ON t.sede_id = s.sede_id
+GROUP BY s.nombre_sede, s.localidad, s.caracteristicas
+ORDER BY atenciones DESC;
+                 nombre_sede                 |   localidad    | camas_uci | atenciones | costo_promedio
+---------------------------------------------+----------------+-----------+------------+-----------------
+  Unidad De Servicios De Salud El Tunal      | TUNJUELITO     | 38        |        100 |      309245.27
+  Unidad De Servicios De Salud Simón Bolívar | USAQUEN        | 60        |        100 |      318313.23
+  Unidad De Servicios De Salud Santa Clara   | ANTONIO NARIÑO | 45        |        100 |      289841.78
+(3 rows)
